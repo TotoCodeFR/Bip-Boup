@@ -1,4 +1,5 @@
-import 'dotenv/config';
+import { getDopplerClient } from './utility/doppler.js'
+const doppler = await getDopplerClient()
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
