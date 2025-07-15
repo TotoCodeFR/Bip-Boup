@@ -1,58 +1,66 @@
-import { getDopplerClient } from './utility/doppler.js'
-import 'dotenv/config'
-const doppler = await getDopplerClient()
+import { getDopplerClient } from './utility/doppler.js';
+import 'dotenv/config';
+await getDopplerClient(); // Inject secrets from Doppler
+
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as DiscordStrategy } from 'passport-discord';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import pg from 'pg';
+import connectPg from 'connect-pg-simple';
 import { getSupabaseClient } from './utility/supabase.js';
 
-const supabase = getSupabaseClient()
-
-function getDiscordAvatarURL(id, avatar) {
-  if (!avatar || avatar.startsWith('http')) {
-    return avatar ?? ''; // already full URL or null
-  }
-
-  const format = avatar.startsWith('a_') ? 'gif' : 'png';
-  return `https://cdn.discordapp.com/avatars/${id}/${avatar}.${format}?size=512`;
-}
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
+const supabase = getSupabaseClient();
 const app = express();
 
-// Permet d'utiliser JSON dans les requêtes
-app.use(express.json());
+// ====== PostgreSQL session store ======
+const PgSession = connectPg(session);
+const pgPool = new pg.Pool({
+  connectionString: process.env.SUPABASE_DB_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
-// ====== Setup sessions Discord depuis Supabase ======
+app.use(session({
+  store: new PgSession({
+    pool: pgPool,
+    tableName: 'user_sessions'
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+  }
+}));
+
+// ====== Other middleware ======
+app.use(express.json());
+app.use(passport.initialize());
+app.use(passport.session());
+
+// ====== Discord OAuth ======
 passport.use(new DiscordStrategy({
   clientID: process.env.DISCORD_CLIENT_ID,
   clientSecret: process.env.DISCORD_CLIENT_SECRET,
   callbackURL: process.env.REDIRECT_URI,
-  scope: ['identify'],
+  scope: ['identify']
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     const discordId = profile.id;
 
-    // On *essaie* de retrouver l'utilisateur
     const { data: existingUser, error: selectError } = await supabase
       .from('users')
       .select('*')
       .eq('discord_id', discordId)
       .single();
 
-    if (selectError && selectError.code !== 'PGRST116') { // PGRST116 = aucune ligne trouvée
-      console.error('Supabase select error:', selectError);
-      return done(selectError, null);
-    }
-
     const now = new Date().toISOString();
 
     if (!existingUser) {
-      // Insert new user
       const { data: insertedUser, error: insertError } = await supabase
         .from('users')
         .insert({
@@ -66,14 +74,10 @@ passport.use(new DiscordStrategy({
         .select()
         .single();
 
-      if (insertError) {
-        console.error('Supabase insert error:', insertError);
-        return done(insertError, null);
-      }
-
+      if (insertError) return done(insertError, null);
       profile.supabaseUser = insertedUser;
     } else {
-      const { error: updateError } = await supabase
+      await supabase
         .from('users')
         .update({
           username: profile.username,
@@ -82,90 +86,58 @@ passport.use(new DiscordStrategy({
           last_login: now
         })
         .eq('discord_id', discordId);
-
-      if (updateError) {
-        console.error('Supabase update error:', updateError);
-        // Ce n'est pas une erreur fatale donc on peuut continuer
-      }
-
       profile.supabaseUser = existingUser;
     }
 
-    profile.accessToken = accessToken; // garder le token d'accès Discord au cas où
+    profile.accessToken = accessToken;
     done(null, profile);
   } catch (error) {
-    console.error('Discord strategy error:', error);
     done(error, null);
   }
 }));
 
-// ====== Passport + Applis autorisées Discord ======
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,                      // ne sauvegarde pas la session si non modifiée
-    saveUninitialized: false,          // ne pas créer la session jusqu'à ce que quelque chose soit crée
-    cookie: {
-      secure: process.env.PORT === 10000,                   // true = HTTPS, false = HTTP
-      maxAge: 1000 * 60 * 60 * 24 * 7  // durée: 7j (peut être à ajuster)
-    }
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
-
 passport.serializeUser((user, done) => {
-  // Garder uniquement l'ID Supabase ou Discord
   done(null, user.supabaseUser.discord_id);
 });
 
 passport.deserializeUser(async (discordId, done) => {
-  try {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('discord_id', discordId)
-      .single();
-
-    if (error) {
-      return done(error, null);
-    }
-    done(null, data);
-  } catch (err) {
-    done(err, null);
-  }
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('discord_id', discordId)
+    .single();
+  done(error, data);
 });
 
-// ====== Chemins web ======
-
-app.get('/auth/discord', passport.authenticate('discord'));
-
-app.get(
-  '/auth/discord/callback',
-  passport.authenticate('discord', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/dashboard');
-  }
-);
-
+// ====== Routes ======
 function checkAuth(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect('/');
 }
 
-app.use('/assets', express.static('panel'));
+function getDiscordAvatarURL(id, avatar) {
+  if (!avatar || avatar.startsWith('http')) {
+    return avatar ?? '';
+  }
+  const format = avatar.startsWith('a_') ? 'gif' : 'png';
+  return `https://cdn.discordapp.com/avatars/${id}/${avatar}.${format}?size=512`;
+}
 
+app.use('/assets', express.static('panel'));
 app.use(express.static(path.join(__dirname, 'panel')));
 
-app.get('/ping', (req, res) => {
-  res.send('Le bot est en ligne et fonctionne correctement !');
-});
+app.get('/auth/discord', passport.authenticate('discord'));
+
+app.get('/auth/discord/callback',
+  passport.authenticate('discord', { failureRedirect: '/' }),
+  (req, res) => res.redirect('/dashboard')
+);
+
+app.get('/ping', (req, res) => res.send('Le bot est en ligne et fonctionne correctement !'));
 
 app.get('/api/user', checkAuth, (req, res) => {
   const id = req.user.discord_id || req.user.id;
-  const avatarHash = req.user.avatar;
-  const avatarUrl = getDiscordAvatarURL(id, avatarHash);
+  const avatarUrl = getDiscordAvatarURL(id, req.user.avatar);
 
   res.json({
     username: req.user.username,
@@ -176,10 +148,8 @@ app.get('/api/user', checkAuth, (req, res) => {
 });
 
 app.get('/logout', (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
+  req.logout(err => {
+    if (err) return next(err);
     res.redirect('/');
   });
 });
@@ -188,7 +158,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'panel', 'index.html'));
 });
 
-// Démarrer le serveur Express
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('✅ Serveur connecté!');
 });
