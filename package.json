@@ -1,0 +1,21 @@
+{
+  "name": "bip-boup",
+  "version": "1.0.0",
+  "description": "Un service de création de bots Discord.",
+  "license": "AGPL-3.0-or-later",
+  "author": "TotoCodeFR",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.51.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "passport": "^0.7.0",
+    "passport-discord": "^0.1.4"
+  }
+}
