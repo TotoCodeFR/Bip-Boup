@@ -1,6 +1,6 @@
 import { getDopplerClient } from './utility/doppler.js';
 import 'dotenv/config';
-await getDopplerClient(); // Inject secrets from Doppler
+await getDopplerClient(); // Secrets provenant de Doppler injectés
 
 import express from 'express';
 import session from 'express-session';
@@ -16,7 +16,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const supabase = getSupabaseClient();
 const app = express();
 
-// ====== PostgreSQL session store ======
+// ====== PostgreSQL store de session ======
 const PgSession = connectPg(session);
 const pgPool = new pg.Pool({
   connectionString: process.env.SUPABASE_DB_URL,
@@ -32,12 +32,12 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+    secure: process.env.NODE_ENV === 'production', // HTTPS en prod
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 jours
   }
 }));
 
-// ====== Other middleware ======
+// ====== Autres middleware ======
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -133,7 +133,7 @@ app.get('/auth/discord/callback',
   (req, res) => res.redirect('/dashboard')
 );
 
-app.get('/ping', (req, res) => res.send('Le bot est en ligne et fonctionne correctement !'));
+app.get('/ping', (req, res) => res.send('Service en ligne !'));
 
 app.get('/api/user', checkAuth, (req, res) => {
   const id = req.user.discord_id || req.user.id;
