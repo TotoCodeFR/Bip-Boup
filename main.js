@@ -1,7 +1,6 @@
 import { getDopplerClient } from './utility/doppler.js';
 import 'dotenv/config';
 await getDopplerClient(); // Secrets provenant de Doppler injectés
-
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
