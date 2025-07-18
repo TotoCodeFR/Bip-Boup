@@ -456,22 +456,22 @@ class BlockEditor {
     
     getBlockHTML(blockData) {
         const templates = {
-            'ready': 'When bot is ready',
-            'click': 'When <input type="text" placeholder="component" data-input="component"> is clicked',
-            'custom-command': 'Define command <input type="text" placeholder="name" data-input="name">',
-            'reply': 'Reply <input type="text" placeholder="message" data-input="message">',
-            'defer': 'Defer reply',
-            'send-message': 'Send message in <input type="text" placeholder="channel ID" data-input="channelId">',
-            'create-embed': 'Create embed',
-            'set-variable': 'Set <input type="text" placeholder="variable" data-input="variable"> to <input type="text" placeholder="value" data-input="value">',
-            'get-variable': 'Get <input type="text" placeholder="variable" data-input="variable">',
+            'ready': 'Lorsque le bot est connecté',
+            'click': 'Lorsque <input type="text" placeholder="component" data-input="component"> est cliqué',
+            'custom-command': 'Créer une commande <input type="text" placeholder="nom" data-input="name">',
+            'reply': 'Répondre <input type="text" placeholder="message" data-input="message">',
+            'defer': 'Faire réfléchir le bot',
+            'send-message': 'Envoyer un message dans salon <input type="text" placeholder="ID du salon" data-input="channelId">',
+            'create-embed': 'Créer un embed',
+            'set-variable': 'Définir <input type="text" placeholder="variable" data-input="variable"> à <input type="text" placeholder="valeur" data-input="value">',
+            'get-variable': 'Récupérer <input type="text" placeholder="variable" data-input="variable">',
             'add': '<input type="text" placeholder="a" data-input="a"> + <input type="text" placeholder="b" data-input="b">',
             'subtract': '<input type="text" placeholder="a" data-input="a"> - <input type="text" placeholder="b" data-input="b">',
             'multiply': '<input type="text" placeholder="a" data-input="a"> × <input type="text" placeholder="b" data-input="b">',
             'divide': '<input type="text" placeholder="a" data-input="a"> ÷ <input type="text" placeholder="b" data-input="b">',
-            'import-file': 'Import <input type="text" placeholder="filename" data-input="filename">',
-            'export-function': 'Export function <input type="text" placeholder="name" data-input="name">',
-            'call-function': 'Call <input type="text" placeholder="function" data-input="function">'
+            'import-file': 'Importer <input type="text" placeholder="nom du fichier" data-input="filename">',
+            'export-function': 'Exporter fonction <input type="text" placeholder="nom" data-input="name">',
+            'call-function': 'Exécuter <input type="text" placeholder="fonction" data-input="function">'
         };
         
         return templates[blockData.type] || 'Unknown block';
