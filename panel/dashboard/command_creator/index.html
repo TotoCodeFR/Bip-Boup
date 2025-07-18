@@ -1,169 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Blockly Discord Command Builder</title>
-<script src="https://unpkg.com/blockly/blockly.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-<style>
-  html, body {
-    height: 100%;
-    margin: 0; padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background: #f4f6ff;
-  }
-  #blocklyDiv {
-    height: 100vh;
-    width: 100vw;
-  }
-  #generateBtn {
-    position: absolute;
-    top: 12px; right: 12px;
-    z-index: 1000;
-    background: #5a4de1;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;
-  }
-  #generateBtn:hover {
-    background: #483cc5;
-  }
-
-  /* Popup modal */
-  #popupOverlay {
-    display: none;
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 2000;
-    justify-content: center;
-    align-items: center;
-  }
-  #popup {
-    background: white;
-    border-radius: 10px;
-    padding: 24px;
-    width: 350px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-  #popup h2 {
-    margin-top: 0;
-    font-weight: 700;
-    font-size: 1.4rem;
-    margin-bottom: 16px;
-    color: #312e6f;
-  }
-  #popup label {
-    display: block;
-    font-weight: 600;
-    margin-top: 12px;
-    margin-bottom: 4px;
-  }
-  #popup input[type=text] {
-    width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1.5px solid #bbb;
-    font-size: 14px;
-  }
-  #parametersList {
-    margin-top: 8px;
-  }
-  #parametersList > div {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 6px;
-    align-items: center;
-  }
-  #parametersList input[type=text], #parametersList select {
-    flex: 1;
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1.5px solid #bbb;
-    font-size: 14px;
-  }
-  #parametersList select.optional-select {
-    flex: 0.8;
-  }
-  #parametersList button.removeParamBtn {
-    background: #e74c3c;
-    border: none;
-    color: white;
-    font-weight: 700;
-    border-radius: 6px;
-    cursor: pointer;
-    padding: 6px 10px;
-  }
-  #parametersList button.removeParamBtn:hover {
-    background: #c0392b;
-  }
-  #addParamBtn {
-    margin-top: 10px;
-    background: #5a4de1;
-    border: none;
-    color: white;
-    font-weight: 700;
-    border-radius: 6px;
-    cursor: pointer;
-    padding: 8px 12px;
-  }
-  #addParamBtn:hover {
-    background: #483cc5;
-  }
-  #popupButtons {
-    margin-top: 20px;
-    text-align: right;
-  }
-  #popupButtons button {
-    font-weight: 600;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-  }
-  #cancelBtn {
-    background: #bbb;
-    color: #222;
-    margin-right: 10px;
-  }
-  #cancelBtn:hover {
-    background: #999;
-  }
-  #createBtn {
-    background: #5a4de1;
-    color: white;
-  }
-  #createBtn:hover {
-    background: #483cc5;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Éditeur de blocs · Bip Boup</title>
+    <link rel="stylesheet" href="/assets/dashboard/command_creator/style.css">
 </head>
 <body>
-
-<div id="blocklyDiv"></div>
-<button id="generateBtn">Generate Code</button>
-
-<!-- Popup for creating command -->
-<div id="popupOverlay">
-  <div id="popup">
-    <h2>Create Command</h2>
-    <label>Command Name:<br />
-      <input type="text" id="commandNameInput" placeholder="e.g. ping" />
-    </label>
-    <h3>Parameters</h3>
-    <div id="parametersList"></div>
-    <button id="addParamBtn">+ Add Parameter</button>
-    <div style="margin-top:15px; text-align: right;">
-      <button id="cancelBtn">Cancel</button>
-      <button id="createBtn">Create</button>
+    <div class="editor-container">
+        <div class="header">
+            <h1 style="color: red;">CETTE PAGE EST EN BÊTA! GÉNÉRER LE CODE N'EST PAS ENCORE LIÉ AU SERVICE!</h1>
+            <div class="header-buttons">
+                <button id="generate-code" class="btn btn-primary">Générer Code</button>
+                <button id="clear-workspace" class="btn btn-secondary">Effacer interface</button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="toolbox">
+                <h3>Blocs</h3>
+                
+                <div class="block-category">
+                    <h4>Évènements</h4>
+                    <div class="block-item event-block" data-type="ready">
+                        <div class="block-header">Lorsque le bot est connecté</div>
+                        <div class="block-connector"></div>
+                    </div>
+                    <div class="block-item event-block" data-type="click">
+                        <div class="block-header">Lorsque <input type="text" placeholder="component"> est cliqué</div>
+                        <div class="block-connector"></div>
+                    </div>
+                </div>
+                
+                <div class="block-category">
+                    <h4>Commandes</h4>
+                    <div class="block-item command-block" data-type="custom-command">
+                        <div class="block-header">Créer une commande <input type="text" placeholder="nom"></div>
+                        <div class="block-connector"></div>
+                    </div>
+                </div>
+                
+                <div class="block-category">
+                    <h4>Actions</h4>
+                    <div class="block-item action-block" data-type="reply">
+                        <div class="block-header">Répondre <input type="text" placeholder="message"></div>
+                    </div>
+                    <div class="block-item action-block" data-type="defer">
+                        <div class="block-header">Faire réfléchir le bot</div>
+                    </div>
+                    <div class="block-item action-block" data-type="send-message">
+                        <div class="block-header">Envoyer un message dans salon <input type="text" placeholder="ID du salon"></div>
+                    </div>
+                </div>
+                
+                <div class="block-category">
+                    <h4>Variables</h4>
+                    <div class="block-item variable-block" data-type="set-variable">
+                        <div class="block-header">Définir <input type="text" placeholder="variable"> à <input type="text" placeholder="valeur"></div>
+                    </div>
+                    <div class="block-item variable-block" data-type="get-variable">
+                        <div class="block-header">Récupérer <input type="text" placeholder="variable"></div>
+                    </div>
+                    <div class="block-item variable-block" data-type="create-embed">
+                        <div class="block-header">Créer un embed</div>
+                        <button class="embed-editor-btn">Modifier embed</button>
+                    </div>
+                </div>
+                
+                <div class="block-category">
+                    <h4>Maths</h4>
+                    <div class="block-item math-block" data-type="add">
+                        <div class="block-header"><input type="text" placeholder="a"> + <input type="text" placeholder="b"></div>
+                    </div>
+                    <div class="block-item math-block" data-type="subtract">
+                        <div class="block-header"><input type="text" placeholder="a"> - <input type="text" placeholder="b"></div>
+                    </div>
+                    <div class="block-item math-block" data-type="multiply">
+                        <div class="block-header"><input type="text" placeholder="a"> × <input type="text" placeholder="b"></div>
+                    </div>
+                    <div class="block-item math-block" data-type="divide">
+                        <div class="block-header"><input type="text" placeholder="a"> ÷ <input type="text" placeholder="b"></div>
+                    </div>
+                </div>
+                
+                <div class="block-category">
+                    <h4>Fichiers de code (BÊTA)</h4>
+                    <div class="block-item code-block" data-type="import-file">
+                        <div class="block-header">Importer <input type="text" placeholder="nom du fichier"></div>
+                    </div>
+                    <div class="block-item code-block" data-type="export-function">
+                        <div class="block-header">Exporter fonction <input type="text" placeholder="nom"></div>
+                    </div>
+                    <div class="block-item code-block" data-type="call-function">
+                        <div class="block-header">Exécuter <input type="text" placeholder="fonction"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="workspace">
+                <h3>Zone de travail</h3>
+                <div id="workspace-area"></div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-
-<script src="/assets/dashboard/command_creator/script.js"></script>
+    
+    <!-- Embed Editor Modal -->
+    <div id="embed-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Éditeur d'embed</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="embed-editor">
+                    <div class="embed-form">
+                        <label>Titre:</label>
+                        <input type="text" id="embed-title" placeholder="Titre de l'embed">
+                        
+                        <label>Description:</label>
+                        <textarea id="embed-description" placeholder="Description de l'embed"></textarea>
+                        
+                        <label>Couleur:</label>
+                        <input type="color" id="embed-color" value="#0099ff">
+                        
+                        <label>Auteur:</label>
+                        <input type="text" id="embed-author" placeholder="Nom de l'auteur">
+                        
+                        <label>Footer:</label>
+                        <input type="text" id="embed-footer" placeholder="Footer text">
+                        
+                        <label>URL de l'image:</label>
+                        <input type="text" id="embed-image" placeholder="https://example.com/image.png">
+                        
+                        <label>URL de la bannière:</label>
+                        <input type="text" id="embed-thumbnail" placeholder="https://example.com/thumb.png">
+                        
+                        <div class="embed-actions">
+                            <h4>Components</h4>
+                            <button id="add-button" class="btn btn-sm">Ajouter un bouton</button>
+                            <button id="add-dropdown" class="btn btn-sm">Ajouter un dropdown</button>
+                        </div>
+                    </div>
+                    
+                    <div class="embed-preview">
+                        <h4>Aperçu</h4>
+                        <div id="embed-preview-content"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-embed" class="btn btn-primary">Enregistrer embed</button>
+                <button id="cancel-embed" class="btn btn-secondary">Annuler</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/assets/dashboard/command_creator/script.js"></script>
 </body>
 </html>

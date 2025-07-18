@@ -1,0 +1,33 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background: #f4f6ff;
+  }
+  
+  #blocklyDiv {
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  button#generateBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 10px 20px;
+    background: #5a4de1;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(90, 77, 225, 0.3);
+    z-index: 1000;
+  }
+  
+  button#generateBtn:hover {
+    background: #453acb;
+  }
+  

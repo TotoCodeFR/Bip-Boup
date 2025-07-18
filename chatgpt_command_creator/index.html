@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Discord Bot Blockly Editor</title>
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+  <style>
+    html, body, #blocklyDiv {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #blocklyDiv {
+      width: 80%;
+      height: 100vh;
+      float: left;
+    }
+    #sidebar {
+      width: 20%;
+      height: 100vh;
+      float: left;
+      background: #23272a;
+      color: white;
+      padding: 10px;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    button#createCommandBtn {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #5865F2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sidebar">
+    <button id="createCommandBtn">+ Create Command</button>
+  </div>
+
+  <div id="blocklyDiv"></div>
+
+  <xml id="toolbox" style="display: none">
+    <category name="Commands" categorystyle="command_blocks">
+      <block type="create_command"></block>
+    </category>
+    <category name="Actions" categorystyle="reply_blocks">
+      <block type="reply_block"></block>
+      <block type="defer_reply"></block>
+    </category>
+    <category name="Variables" custom="VARIABLE"></category>
+  </xml>
+
+  <script src="/assets/dashboard/command_creator/script.js"></script>
+</body>
+</html>
