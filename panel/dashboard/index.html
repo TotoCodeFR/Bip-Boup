@@ -7,11 +7,27 @@
   <link rel="stylesheet" href="/assets/dashboard/style.css">
 </head>
 <body>
-  <div class="banner">
-    <img id="avatar" width="48" height="48" />
-    <h2 id="welcome">Chargement...</h2>
+  <div id="addbotpopup">
+    <h2>Ajouter un bot</h2>
+    <p>Pour ajouter un bot, veuillez entrer son token.</p>
+    <input type="password" id="addbotpopup__token" placeholder="Token du bot">
+    <div id="addbotpopup__buttons">
+      <button id="addbotpopup__add">Ajouter</button>
+      <button id="addbotpopup__cancel">Annuler</button>
+      <a href="https://discord.com/developers/applications" target="_blank"><button>Ouvrir le portal des développeurs</button></a>
+    </div>
   </div>
-
+  <div id="main-content">
+    <div class="banner">
+      <img id="avatar" width="48" height="48" />
+      <h2 id="welcome">Chargement...</h2>
+    </div>
+  
+    <div id="bots"></div>
+  
+    <button id="addbot"><span>&#43;</span><div class="sep"></div>Ajouter un bot</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.min.js"></script>
   <script src="/assets/dashboard/script.js"></script>
 </body>
 </html>

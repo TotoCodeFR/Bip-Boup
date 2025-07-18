@@ -24,7 +24,7 @@ body, html {
     justify-content: center;
 }
 
-#server-grid {
+#bots {
     align-items: center;
     justify-content: center;
     display: grid;
@@ -33,7 +33,7 @@ body, html {
     padding: 20px;
 }
 
-#server-grid > .server-card {
+#bots > .bots-card {
     background-color: #36393f1f;
     border-radius: 10px;
     padding: 20px;
@@ -42,4 +42,79 @@ body, html {
     align-items: center;
     text-align: center;
     border: 1px solid #474F99;
+}
+
+#addbot {
+    background-color: #5865F2;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    gap: 8px;
+}
+
+#addbot span {
+    font-size: 16px;
+}
+
+#addbot .sep {
+    min-height: 18px;
+}
+
+.sep {
+    display: flex;
+    background-color: #ffffff30;
+    min-width: 1px;
+}
+
+#addbotpopup {
+    display: flex;
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    border: 1px solid #474F99;
+    border-radius: 10px;
+    padding: 12px;
+    gap: 10px;
+    background-color: #2f3136;
+}
+
+#addbotpopup__token {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #36393f41;
+    width: 100%;
+}
+
+#addbotpopup__buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#addbotpopup__buttons button {
+    background-color: #5865F2;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#main-content.blurred {
+    filter: blur(5px);
+    transition: filter 0.3s ease-out;
+    pointer-events: none;
 }

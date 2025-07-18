@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blockly Discord Command Builder</title>
+<script src="https://unpkg.com/blockly/blockly.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+<style>
+  html, body {
+    height: 100%;
+    margin: 0; padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f4f6ff;
+  }
+  #blocklyDiv {
+    height: 100vh;
+    width: 100vw;
+  }
+  #generateBtn {
+    position: absolute;
+    top: 12px; right: 12px;
+    z-index: 1000;
+    background: #5a4de1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+  }
+  #generateBtn:hover {
+    background: #483cc5;
+  }
+
+  /* Popup modal */
+  #popupOverlay {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+  }
+  #popup {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    width: 350px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  #popup h2 {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    color: #312e6f;
+  }
+  #popup label {
+    display: block;
+    font-weight: 600;
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+  #popup input[type=text] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1.5px solid #bbb;
+    font-size: 14px;
+  }
+  #parametersList {
+    margin-top: 8px;
+  }
+  #parametersList > div {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    align-items: center;
+  }
+  #parametersList input[type=text], #parametersList select {
+    flex: 1;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1.5px solid #bbb;
+    font-size: 14px;
+  }
+  #parametersList select.optional-select {
+    flex: 0.8;
+  }
+  #parametersList button.removeParamBtn {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 6px 10px;
+  }
+  #parametersList button.removeParamBtn:hover {
+    background: #c0392b;
+  }
+  #addParamBtn {
+    margin-top: 10px;
+    background: #5a4de1;
+    border: none;
+    color: white;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 8px 12px;
+  }
+  #addParamBtn:hover {
+    background: #483cc5;
+  }
+  #popupButtons {
+    margin-top: 20px;
+    text-align: right;
+  }
+  #popupButtons button {
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+  #cancelBtn {
+    background: #bbb;
+    color: #222;
+    margin-right: 10px;
+  }
+  #cancelBtn:hover {
+    background: #999;
+  }
+  #createBtn {
+    background: #5a4de1;
+    color: white;
+  }
+  #createBtn:hover {
+    background: #483cc5;
+  }
+</style>
+</head>
+<body>
+
+<div id="blocklyDiv"></div>
+<button id="generateBtn">Generate Code</button>
+
+<!-- Popup for creating command -->
+<div id="popupOverlay">
+  <div id="popup">
+    <h2>Create Command</h2>
+    <label>Command Name:<br />
+      <input type="text" id="commandNameInput" placeholder="e.g. ping" />
+    </label>
+    <h3>Parameters</h3>
+    <div id="parametersList"></div>
+    <button id="addParamBtn">+ Add Parameter</button>
+    <div style="margin-top:15px; text-align: right;">
+      <button id="cancelBtn">Cancel</button>
+      <button id="createBtn">Create</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/dashboard/command_creator/script.js"></script>
+</body>
+</html>

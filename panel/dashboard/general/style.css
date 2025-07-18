@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #2b2b2b;
+    color: #fff;
+}
+
+#root {
+    width: 100%;
+    height: 100vh;
+}
+
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #2b2b2b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner {
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    border-top: 8px solid #fff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#boticon {
+    border-radius: 100%;
+}
+
+#root {
+    display: flex;
+    flex-direction: row;
+    opacity: 0;
+}
+
+#sidebar {
+    display: flex;
+    width: 300px;
+    min-height: 100vh;
+    flex-direction: column;
+    border-right: solid 1px #ffffff10;
+}
+
+#botinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+}
+
+#sidebar button {
+    background-color: #535353;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 4px;
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+#sidebar button.active {
+    background-color: #5865F2;
+    border-radius: 18px;
+}
+
+select {
+    border-radius: 12px;
+    padding: 8px;
+    border: none;
+}
+
+select > option {
+    border-radius: 12px;
+    padding: 8px;
+    border: none;
+}
+
+input[type="text"] {
+    border: none;
+    border-radius: 12px;
+    padding: 8px;
+}

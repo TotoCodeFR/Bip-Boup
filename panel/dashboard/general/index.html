@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Général · Bip Boup</title>
+  <link rel="stylesheet" href="/assets/dashboard/general/style.css">
+</head>
+<body>
+  <div id="loading-screen">
+    <div class="spinner"></div>
+  </div>
+  <div id="root">
+    <div id="sidebar">
+      <div id="botinfo">
+        <img src="" alt="Bot Name" id="boticon" width="64" height="64">
+        <h4 id="botname" align="center">Bot Name</h4>
+      </div>
+      <button class="active">⚙️ Général</button>
+      <button id="preparecode">Préparer le code</button>
+    </div>
+    <div id="content">
+      <div class="presence">
+        <select name="activitytype" id="activitytype">
+          <option value="playing">🎮 Joue à</option>
+          <option value="listening">🎵 Écoute</option>
+          <option value="watching">🎥 Regarde</option>
+          <option value="streaming">📺 Streame</option>
+          <option value="competing">🏆 Compète</option>
+          <option value="online">🟢 En ligne</option>
+          <option value="idle">🌙 Inactif</option>
+          <option value="dnd">🔴 Ne pas déranger</option>
+        </select>
+        <p>Note : Toute autre présence que "Ne pas déranger" et "Inactif" sera en ligne.</p>
+        <input type="text" name="statustext" id="statustext" placeholder="Texte du statut">
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="/assets/dashboard/general/script.js" type="module"></script>
+</body>
+</html>
